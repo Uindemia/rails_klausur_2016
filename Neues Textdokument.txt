@@ -1,0 +1,39 @@
+User
+    email:string
+    name:string
+    password_digest:string
+    Hat mehrere Accounts
+--> rails g scaffold User email:string name:string password_digest:string -s
+--> has_many :accounts
+
+Account
+    balance:integer
+    Gehört zu genau einem User
+    Hat viele BookEntries
+--> rails g scaffold Account balance:integer user:references -s
+--> has_many :book_entries
+
+Category
+    name:string
+    description:text
+    expression:string
+    Hat viele BookEntries
+--> rails g scaffold Category name:string description:text expression:string -s
+--> has_and_belongs_to_many :book_entries
+
+BookEntry
+    Gehört zu einem Account
+    Hat viele Categories
+    description:text
+    amount:integer
+--> rails g scaffold BookEntry description:text amount:integer account:references -s
+--> has_and_belongs_to_many :categories
+
+Join-Tabellen
+bundle exec rails g migration CreateJoinTableCategoryBookEntry category book_entry
+bundle exec rake db:migrate RAILS_ENV=test
+
+Der root_path soll auf 'categories#index' zeigen.
+root 'categories#index' in routes.rb
+
+Zeilen aus application.html.erb löschen!
